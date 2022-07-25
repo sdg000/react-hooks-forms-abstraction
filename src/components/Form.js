@@ -1,21 +1,42 @@
+//FORMS ABSTRACTION -DELAYERING
 import React, { useState } from "react";
 
 function Form() {
-  const [firstName, setFirstName] = useState("John");
-  const [lastName, setLastName] = useState("Henry");
+  //state variable set to object value
+  const [formData, setFormData] = useState({
+    firstName: "John",
+    lastName: "Henry",
+    admin: false
+  })
 
-  function handleFirstNameChange(event) {
-    setFirstName(event.target.value);
-  }
+  // onEvent, set name / value variables based on event target
+   function nameChange(e) {
+    const name = e.target.name
+    let value = e.target.value
 
-  function handleLastNameChange(event) {
-    setLastName(event.target.value);
+    //logic for checkbox
+    if (e.target.type === "checkbox"){
+      value = e.target.checked
+    }
+
+    //onEvent, copy formdata object, add "name - key" and "input - value" to formData object , and pass to setFormData.
+    setFormData({
+      ...formData, [name]: value
+    });
   }
+    
+    //function to handle form submit.
+    function handleSubmit(e){
+      e.preventDefault()
+      console.log(formData)
+    }
+  
 
   return (
-    <form>
-      <input type="text" onChange={handleFirstNameChange} value={firstName} />
-      <input type="text" onChange={handleLastNameChange} value={lastName} />
+    <form onSubmit={handleSubmit}>
+      <input type="text" onChange={nameChange} name="firstName" value={formData.firstName}/>
+      <input type="text" onChange={nameChange} name="lastName" value={formData.lastName} />
+      <input type="checkbox" name="admin" onChange={nameChange}/>
       <button type="submit">Submit</button>
     </form>
   );
